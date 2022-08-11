@@ -1,21 +1,52 @@
+// import { EventsMediator } from "./Mediator.js";
+
 export class MoviesData {
 
-    init() {
-        this.url = 'https://api.themoviedb.org/3/discover/movie?api_key=54dd8d9cb83969c4d9e360c3dde9c602&language=en&page=';
+    constructor() {
         this.currentPage = 1;
         this.movies = []
         this.numberOfMovies = 0;
-        this.casheElements();
-        this.getMovies();
-    }
-    casheElements() {
-        this.dis_moviesList = document.querySelector("#moviesList");
+        this.url = 'https://api.themoviedb.org/3/discover/movie?api_key=54dd8d9cb83969c4d9e360c3dde9c602&language=en&page=';
+
+
     }
 
-    async getMovies() {
-        const response = await fetch(this.url + this.currentPage);
+    init(eventMediator) {
+        //eventMediator
+        this.eventMediator = eventMediator;
+        console.log("2.Calling Event 'Test' in Movies", this.eventMediator)
+        this.eventMediator.emit("TestEvent", 'test_string');
+
+
+        this.casheElements();
+
+        this.getMovies(this.currentPage);
+
+        this.bindEvents();
+
+        // console.log("init about to render")
+        // this.render(this.dis_moviesList);
+    }
+
+    casheElements() {
+        this.dis_moviesList = document.querySelector("#moviesList");
+        console.log("3.Movies elements Cashed", this.dis_moviesList)
+
+    }
+
+    bindEvents() {
+        console.log("events binded")
+        // this.eventMediator.on("MoviesAPILoaded", function (movies_obj) {
+        //     movies_obj.render.call(this);
+        //     // this.render();
+        // });
+        // this.eventMediator.emit("MoviesAPILoaded")
+    }
+
+    async getMovies(currentPage) {
+        const response = await fetch(this.url + currentPage);
         const data = await response.json();
-        console.log("adta", data.results)
+        // console.log("adta", data.results)
         this.movies = data.results;
 
         // let topRated = movies[0];
@@ -40,13 +71,16 @@ export class MoviesData {
             };
         });
         // eventsMediator.emit("updateTopRatedMovie", {topRated,movies});
-        console.log("inside movies", this.movies);
-        //return this.movies;
-        this.render();
+        // console.log("getMovies()", this.movies);
+        this.eventMediator.emit("MoviesAPILoaded", this )
+        console.log("getMovies() called", this.movies)
     };
+
     render() {
+        console.log("movies Rendering...",this.movies,this.dis_moviesList)
         var template = ``;
-        for (let i = 1; i <= this.movies.length; i++) {
+        for (let i = 1; i <= this.movies.length - 1; i++) {
+            console.log(this.movies[i]);
             // this.movies.forEach(element => {
             template += `
            <li>
