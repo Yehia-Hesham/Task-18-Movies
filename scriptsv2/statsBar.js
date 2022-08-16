@@ -1,45 +1,48 @@
 export class StatsBar{
 
-    constructor(eventsMediator){
-        this.eventsMediator = eventsMediator;
+    constructor(){
 
-        this.currentPage = 1;
-        this.numberOfMovies = 0;
-        this.topRatedMovie = {};
-        this.topRating = 0;
+        // this.currentPage = 1;
+
     }
 
-    init(movies) {
-        this.movies = movies;
+    init(eventsMediator) {
+        this.eventsMediator = eventsMediator;
+        this.numberOfMovies = 0;
         this.currentPage = 1;
         this.numberOfMovies = 1;
-
+        this.topRatedMovie = {};
+        this.topRating = 0;
         // this.updateStatsBar(movies);
     }
 
     casheElements(){
-        const dis_page = document.querySelector("#page")
-        const dis_numberOfMovies = document.querySelector("#numberOfMovies")
-        const dis_topRatedName = document.querySelector("#topRatedName")
-        const dis_topRatedRating = document.querySelector("#topRatedRating")
+        this.dis_page = document.querySelector("#page")
+        this.dis_numberOfMovies = document.querySelector("#numberOfMovies")
+        this.dis_topRatedName = document.querySelector("#topRatedName")
+        this.dis_topRatedRating = document.querySelector("#topRatedRating")
     }
 
-    updateStatsBar(){
-        var movies = this.movies;
-        console.log("updateStatsBar movies ==>", movies)
-        this.topRatedMovie = movies[0];
-        this.numberOfMovies = movies.length;
+    updateStatsBar(movies){
+        this.movies = movies;
+        // var movies = this.movies;
+        console.log("updateStatsBar movies ==>", this.movies)
+        this.topRatedMovie = this.movies[0];
+        console.log("START TopRatedMovie ==> ", this.topRatedMovie);
+        this.numberOfMovies = this.movies.length;
 
-        // console.log("First Top Rated", TopRated)
-        // movies.forEach(movie => {
-        for (let i = 0; i < movies.length; i++) {
-            if (movies[i].vote_average >= TopRated.vote_average) {
-                this.topRatedMovie = movies[i];
+        for (let i = 0; i < this.movies.length; i++) {
+            if (this.movies[i].vote_average >= this.topRatedMovie.vote_average) {
+                this.topRatedMovie = this.movies[i];
             };
         };
-        console.log("Top Rated Movie ==> ", topRatedMovie);
+        console.log("END TopRatedMovie ==> ", this.topRatedMovie);
     };
-    render(){
 
+    render(){
+        this.dis_topRatedName.innerText = this.topRatedMovie.title;
+        this.dis_topRatedRating.innerText = this.topRatedMovie.vote_average;
+        this.dis_page.innerText = this.currentPage;
+        this.dis_numberOfMovies.innerText = this.movies.length;
     }
 }
