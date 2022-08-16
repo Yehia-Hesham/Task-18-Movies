@@ -21,7 +21,7 @@ export class Pages {
             app.eventsMediator.emit("NextPage",app);
         });
         this.btn_pervious.addEventListener("click", function() {
-            self.pages.decrementPage();
+            app.pages.decrementPage();
             app.eventsMediator.emit("PreviousPage",app);
         });
     };
